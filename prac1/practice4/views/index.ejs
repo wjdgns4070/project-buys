@@ -1,0 +1,19 @@
+<!-- views/index.ejs -->
+<div class="row mt-3">
+    <% menuItems.forEach(item => { %>
+      <div class="col-md-4">
+        <div class="card">
+            <img src="/public/images/<%= item.imageFileName %>" class="card-img-top" alt="<%= item.name %>">
+
+          <!-- 수정된 부분: /public/images/를 이미지 경로 앞에 추가 -->
+          <div class="card-body">
+            <h5 class="card-title"><%= item.name %></h5>
+            <p class="card-text"><%= item.description %></p>
+            <button class="btn btn-primary" onclick="addToCart('<%= item.name %>')">선택하기</button>
+          </div>
+        </div>
+      </div>
+    <% }); %>
+   
+  </div>
+  
