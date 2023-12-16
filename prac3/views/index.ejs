@@ -1,0 +1,70 @@
+<!-- views/index.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>음식 주문 페이지</title>
+    <!-- 부트스트랩 또는 다른 CSS 파일 등을 여기에 추가할 수 있습니다. -->
+    <style>
+        .menu-item {
+            position: relative; /* 부모에 대한 상대 위치 설정 */
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .menu-image {
+            width: 300px;
+            height: 300px;
+            border: 1px solid #ddd; /* 이미지 주변에 경계선 추가 (선택적) */
+            border-radius: 8px; /* 이미지 모서리를 둥글게 만듭니다. */
+            overflow: hidden; /* 이미지 넘치는 부분 숨김 (선택적) */
+        }
+
+        .menu-button {
+            position: absolute; /* 상대 위치 설정을 기반으로 하기 위해 절대 위치 설정 */
+            bottom: 10px;
+            left: 50%; /* 가운데 정렬을 위해 왼쪽 50% 설정 */
+            transform: translateX(-50%); /* 가운데 정렬을 위한 보정 */
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            z-index: 1; /* 버튼이 이미지 위로 올라오도록 설정 */
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <h1>음식 주문 페이지</h1>
+
+    <form id="menu-form" action="/addToCart" method="post">
+        <ul id="menu-list">
+            <!-- 이미지와 버튼 추가 -->
+            <li class="menu-item">
+                <div>
+                    <img src="/images/pizza.jpg" alt="피자" class="menu-image" data-item="피자" data-id="1" data-price="21000원">
+                    <button type="button" class="menu-button">장바구니에 추가</button>
+                </div>
+            </li>
+            <li class="menu-item">
+                <div>
+                    <img src="/images/hamburger.jpg" alt="햄버거" class="menu-image" data-item="햄버거" data-id="2" data-price="12000원">
+                    <button type="button" class="menu-button">장바구니에 추가</button>
+                </div>
+            </li>
+            <li class="menu-item">
+                <div>
+                    <img src="/images/salad.jpg" alt="샐러드" class="menu-image" data-item="샐러드" data-id="3" data-price="8000원">
+                    <button type="button" class="menu-button">장바구니에 추가</button>
+                </div>
+            </li>
+        </ul>
+    </form>
+
+    <script src="/js.js"></script>
+    <!-- 다른 자바스크립트 파일이나 라이브러리 등을 여기에 추가할 수 있습니다. -->
+</body>
+</html>
