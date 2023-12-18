@@ -5,66 +5,326 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>음식 주문 페이지</title>
-    <!-- 부트스트랩 또는 다른 CSS 파일 등을 여기에 추가할 수 있습니다. -->
+    
     <style>
-        .menu-item {
-            position: relative; /* 부모에 대한 상대 위치 설정 */
-            text-align: center;
-            margin-bottom: 20px;
-        }
+    
+body {
+    margin-left: 200px; 
+    margin-top: 0; /* 상단 여백을 0으로 설정 */
+}
 
-        .menu-image {
-            width: 300px;
-            height: 300px;
-            border: 1px solid #ddd; /* 이미지 주변에 경계선 추가 (선택적) */
-            border-radius: 8px; /* 이미지 모서리를 둥글게 만듭니다. */
-            overflow: hidden; /* 이미지 넘치는 부분 숨김 (선택적) */
-        }
+/* 기존 스타일 */
+.main-menu, .side-menu, .drink {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    list-style: none;
+    margin-bottom: 20px;
+    padding: 0;
+}
 
-        .menu-button {
-            position: absolute; /* 상대 위치 설정을 기반으로 하기 위해 절대 위치 설정 */
-            bottom: 10px;
-            left: 50%; /* 가운데 정렬을 위해 왼쪽 50% 설정 */
-            transform: translateX(-50%); /* 가운데 정렬을 위한 보정 */
-            padding: 8px 16px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            z-index: 1; /* 버튼이 이미지 위로 올라오도록 설정 */
-        }
+.menu-image-container {
+    box-sizing: border-box;
+    width: calc(33.33% - 20px);
+    margin: 10px;
+    position: relative;
+}
+
+.menu-image {
+    width: 100%;
+    height: 200px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.menu-button {
+    width: 100%;
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.sidebar {
+    height: 100vh; /* 뷰포트 높이로 설정 */
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 200px;
+    background-color: #f8f9fa;
+    transition: background-color 0.3s ease;
+    z-index: 1000;
+    margin-top: 0; /* 상단 여백을 0으로 설정 */
+}
+
+.sidebar-section {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+}
+
+.sidebar-section.active {
+    background-color: #fff;
+}
+
     </style>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
-    <h1>음식 주문 페이지</h1>
+    <!-- 네비게이션 바 추가 -->
+    <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">J-order</a>
+        </div>
+    </nav> -->
+    <div class="sidebar" id="sidebar">
+        <!-- 각 섹션에 해당하는 클래스를 추가하고, data-target 속성을 이용하여 연결합니다. -->
+        <div class="sidebar-section">J-order</div>
+        <div class="sidebar-section" data-target="main-menu">메인 메뉴</div>
+        <div class="sidebar-section" data-target="side-menu">사이드 메뉴</div>
+        <div class="sidebar-section" data-target="drink">음료</div>
+        
+
+    </div>
 
     <form id="menu-form" action="/addToCart" method="post">
-        <ul id="menu-list">
+        <h1><div class="main-div">메인 메뉴</div></h1>
+        <ul id="menu-list" class="main-menu">
             <!-- 이미지와 버튼 추가 -->
-            <li class="menu-item">
-                <div>
-                    <img src="/images/pizza.jpg" alt="피자" class="menu-image" data-item="피자" data-id="1" data-price="21000원">
-                    <button type="button" class="menu-button">장바구니에 추가</button>
-                </div>
+            <li class="menu-image-container">
+                <img src="/images/pappe.jpg" alt="페퍼로니 피자" class="menu-image" data-item="페퍼로니 피자" data-id="1" data-price="18000원">
+                <button type="button" class="menu-button">장바구니에 추가</button>
             </li>
-            <li class="menu-item">
-                <div>
-                    <img src="/images/hamburger.jpg" alt="햄버거" class="menu-image" data-item="햄버거" data-id="2" data-price="12000원">
-                    <button type="button" class="menu-button">장바구니에 추가</button>
-                </div>
+            <li class="menu-image-container">
+                <img src="/images/hwai.jpg" alt="하와이안 피자" class="menu-image" data-item="하와이안 피자" data-id="2" data-price="17000원">
+                <button type="button" class="menu-button">장바구니에 추가</button>
             </li>
-            <li class="menu-item">
-                <div>
-                    <img src="/images/salad.jpg" alt="샐러드" class="menu-image" data-item="샐러드" data-id="3" data-price="8000원">
-                    <button type="button" class="menu-button">장바구니에 추가</button>
-                </div>
+            <li class="menu-image-container">
+                <img src="/images/bulgogi.jpg" alt="불고기 피자" class="menu-image" data-item="불고기 피자" data-id="3" data-price="15000원">
+                <button type="button" class="menu-button">장바구니에 추가</button>
             </li>
+            <li class="menu-image-container">
+                <img src="/images/saewu.jpg" alt="통새우 피자" class="menu-image" data-item="통새우 피자" data-id="4" data-price="17000원">
+                <button type="button" class="menu-button">장바구니에 추가</button>
+            </li>
+            <li class="menu-image-container">
+                <img src="/images/cheese.jpg" alt="치즈 피자" class="menu-image" data-item="치즈 피자" data-id="5" data-price="13000원">
+                <button type="button" class="menu-button">장바구니에 추가</button>
+            </li>
+            <li class="menu-image-container">
+                <img src="/images/potato.jpg" alt="스윗포테이토 피자" class="menu-image" data-item="스윗포테이토 피자" data-id="6" data-price="15000원">
+                <button type="button" class="menu-button">장바구니에 추가</button>
+            </li>
+        </ul>
+
+        <h1><div class="side-div">사이드 메뉴</div></h1>
+        <ul class="side-menu">
+            
+            <li class="menu-image-container">
+                <img src="/images/salad.jpg" alt="불고기 피자" class="menu-image" data-item="불고기 피자" data-id="3" data-price="15000원">
+                <button type="button" class="menu-button">장바구니에 추가</button>
+            </li>
+            <li class="menu-image-container">
+                <img src="/images/salad.jpg" alt="불고기 피자" class="menu-image" data-item="불고기 피자" data-id="3" data-price="15000원">
+                <button type="button" class="menu-button">장바구니에 추가</button>
+            </li>
+            <li class="menu-image-container">
+                <img src="/images/salad.jpg" alt="불고기 피자" class="menu-image" data-item="불고기 피자" data-id="3" data-price="15000원">
+                <button type="button" class="menu-button">장바구니에 추가</button>
+            </li>
+            <li class="menu-image-container">
+                <img src="/images/salad.jpg" alt="불고기 피자" class="menu-image" data-item="불고기 피자" data-id="3" data-price="15000원">
+                <button type="button" class="menu-button">장바구니에 추가</button>
+            </li>
+            <li class="menu-image-container">
+                <img src="/images/salad.jpg" alt="불고기 피자" class="menu-image" data-item="불고기 피자" data-id="3" data-price="15000원">
+                <button type="button" class="menu-button">장바구니에 추가</button>
+            </li>
+            <li class="menu-image-container">
+                <img src="/images/salad.jpg" alt="불고기 피자" class="menu-image" data-item="불고기 피자" data-id="3" data-price="15000원">
+                <button type="button" class="menu-button">장바구니에 추가</button>
+            </li>
+        </ul>
+
+        <h1><div class="drink-div">음료</div></h1>
+        <ul class="drink">
+            
+            <li class="menu-image-container">
+                <img src="/images/salad.jpg" alt="불고기 피자" class="menu-image" data-item="불고기 피자" data-id="3" data-price="15000원">
+                <button type="button" class="menu-button">장바구니에 추가</button>
+            </li>
+            <li class="menu-image-container">
+                <img src="/images/salad.jpg" alt="불고기 피자" class="menu-image" data-item="불고기 피자" data-id="3" data-price="15000원">
+                <button type="button" class="menu-button">장바구니에 추가</button>
+            </li>
+            <li class="menu-image-container">
+                <img src="/images/salad.jpg" alt="불고기 피자" class="menu-image" data-item="불고기 피자" data-id="3" data-price="15000원">
+                <button type="button" class="menu-button">장바구니에 추가</button>
+            </li>
+
+            <li class="menu-image-container">
+                <img src="/images/salad.jpg" alt="불고기 피자" class="menu-image" data-item="불고기 피자" data-id="3" data-price="15000원">
+                <button type="button" class="menu-button">장바구니에 추가</button>
+            </li>
+            <li class="menu-image-container">
+                <img src="/images/salad.jpg" alt="불고기 피자" class="menu-image" data-item="불고기 피자" data-id="3" data-price="15000원">
+                <button type="button" class="menu-button">장바구니에 추가</button>
+            </li>
+            <li class="menu-image-container">
+                <img src="/images/salad.jpg" alt="불고기 피자" class="menu-image" data-item="불고기 피자" data-id="3" data-price="15000원">
+                <button type="button" class="menu-button">장바구니에 추가</button>
+            </li>
+            
         </ul>
     </form>
 
     <script src="/js.js"></script>
-    <!-- 다른 자바스크립트 파일이나 라이브러리 등을 여기에 추가할 수 있습니다. -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script> 네비게이션 부트스트랩 -->
+
+    <script>
+        // 페이지 스크롤 이벤트를 감지하여 사이드 바의 배경 색을 변경하는 스크립트
+        document.addEventListener('DOMContentLoaded', function () {
+    var sidebar = document.getElementById('sidebar');
+    var mainMenu = document.querySelector('.main-div');
+    var sideMenu = document.querySelector('.side-div');
+    var drink = document.querySelector('.drink-div');
+
+    // 각 섹션의 위치 계산
+    var mainMenuTop = mainMenu.offsetTop;
+    var sideMenuTop = sideMenu.offsetTop;
+    var drinkTop = drink.offsetTop;
+
+    // 클릭 이벤트 추가
+    var sidebarSections = document.querySelectorAll('.sidebar-section');
+    sidebarSections.forEach(function (section) {
+        section.addEventListener('click', function () {
+            var target = section.getAttribute('data-target');
+            var targetTop = 0;
+
+            // 클릭된 섹션에 따라 이동할 위치 결정
+            if (target === 'main-menu') {
+                targetTop = mainMenuTop;
+            } else if (target === 'side-menu') {
+                targetTop = sideMenuTop;
+            } else if (target === 'drink') {
+                targetTop = drinkTop;
+            }
+
+            // 스크롤 이동
+            window.scrollTo({
+                top: targetTop,
+                behavior: 'smooth'
+            });
+
+            // 선택된 섹션 표시
+            setActiveSection(target);
+        });
+    });
+
+    // 페이지 스크롤 이벤트
+    window.addEventListener('scroll', function () {
+        var scrollPosition = window.scrollY;
+
+        // 각 섹션 위치와 현재 스크롤 위치를 비교하여 선택된 섹션 표시
+        if (scrollPosition >= mainMenuTop && scrollPosition < sideMenuTop) {
+            setActiveSection('main-menu');
+        } else if (scrollPosition >= sideMenuTop && scrollPosition < drinkTop) {
+            setActiveSection('side-menu');
+        } else if (scrollPosition >= drinkTop) {
+            setActiveSection('drink');
+        } else {
+            setActiveSection(null);
+        }
+    });
+
+    function setActiveSection(section) {
+        // 선택된 섹션 표시
+        var sections = document.querySelectorAll('.sidebar-section');
+        sections.forEach(function (item) {
+            item.classList.remove('active');
+        });
+
+        if (section) {
+            var activeSection = document.querySelector('.sidebar-section[data-target="' + section + '"]');
+            activeSection.classList.add('active');
+        }
+    }
+});
+
+// 클라이언트 측 코드
+function showCart() {
+        const cartCookie = document.cookie.split('; ')
+            .find(cookie => cookie.startsWith('cart='));
+
+        if (!cartCookie) {
+            alert('장바구니가 비어 있습니다.');
+            return;
+        }
+
+        const decodedCartValue = decodeURIComponent(cartCookie.split('=')[1]);
+        const cartItems = JSON.parse(decodedCartValue);
+
+        const totalAmount = cartItems.reduce((sum, item) => sum + parseFloat(item.price), 0);
+
+        const popupContent = cartItems.map(item => `${item.name} - $${parseFloat(item.price).toFixed(2)}`).join('<br>');
+        const popupHTML = `
+            <div>
+                <h2>장바구니 내역</h2>
+                <p>${popupContent}</p>
+                <hr>
+                <p><strong>총 금액:</strong> $${totalAmount.toFixed(2)}</p>
+            </div>
+        `;
+
+        const popup = window.open('', 'cartPopup', 'width=400,height=400');
+        popup.document.body.innerHTML = popupHTML;
+
+        // "구매하기" 버튼 추가
+        const purchaseButton = document.createElement('button');
+        purchaseButton.textContent = '구매하기';
+        purchaseButton.addEventListener('click', purchaseItems);
+        popup.document.body.appendChild(purchaseButton);
+    }
+
+    // 클라이언트 측 코드
+    function purchaseItems() {
+        const cartCookie = document.cookie.split('; ')
+            .find(cookie => cookie.startsWith('cart='));
+
+        if (!cartCookie) {
+            alert('장바구니가 비어 있습니다.');
+            return;
+        }
+
+        const decodedCartValue = decodeURIComponent(cartCookie.split('=')[1]);
+        const cartItems = JSON.parse(decodedCartValue);
+
+        // 배열로 감싸서 서버로 전송
+        axios.post('/purchase', cartItems)
+            .then(response => {
+                console.log('Purchase successful:', response.data);
+
+                // 구매가 완료되면 쿠키 초기화
+                document.cookie = 'cart=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+
+                // 팝업 창 닫기
+                window.location.reload();
+            })
+            .catch(error => {
+                console.error('Purchase error:', error);
+                alert('구매 중 오류가 발생했습니다.');
+            });
+    }
+
+    </script>
 </body>
 </html>
