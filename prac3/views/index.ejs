@@ -7,22 +7,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>음식 주문 페이지</title>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+
+
     <style>
+        .black_jack_img {
+            width: 200px;
+            height: 100px;
+        }
+
         body {
             margin-left: 200px;
             margin-top: 0;
-            /* 상단 여백을 0으로 설정 */
-
             background-image: url('images/back.jpg');
-            /* 이미지 파일 경로로 수정 */
             background-size: cover;
-            /* 이미지를 화면에 꽉 채우도록 설정 */
             background-position: center;
-            /* 이미지를 가운데 정렬 */
             background-repeat: no-repeat;
-            /* 이미지 반복 없음 */
+            font-family: 'Arial', sans-serif;
+        }
 
 
+        .close-button {
+            position: absolute;
+            top: 0px;
+            right: 30px;
+            font-size: 70px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #fff;
         }
 
         /* 기존 스타일 */
@@ -77,26 +90,54 @@
             bottom: 0;
             left: 0;
             width: 200px;
-            background-color: #f8f9fa;
-            transition: background-color 0.3s ease;
+            background-image: url('images/sideback.jpg');
             z-index: 1000;
             margin-top: 0;
             /* 상단 여백을 0으로 설정 */
+            text-align: center;
+
         }
 
         .sidebar-section {
-            padding: 10px;
+            padding: 15px;
             border-bottom: 1px solid #ddd;
             cursor: pointer;
+            font-size: 18px;
+            /* 폰트 크기 조정 */
         }
 
+
         .sidebar-section.active {
-            background-color: #fff;
+            background-color: #555555;
+            /* 활성 섹션에 대한 더 밝은 배경 색상 */
+            color: white;
+        }
+
+        .mycoin {
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 18px;
+        }
+
+        .gamestart {
+
+            font-size: 20px;
+            width: 200px;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: #555555;
         }
 
         .cart-button:hover {
             background-color: #45a049;
 
+        }
+        .backbox{
+            background-color: #555555;
+            width: 90%;
+            height: 580px;
         }
 
         .modal {
@@ -109,9 +150,11 @@
             height: 100%;
             overflow: auto;
             background-color: rgb(0, 0, 0);
-            background-color: rgba(0, 0, 0, 0.9);
-            padding-top: 60px;
+            background-color: rgba(0, 0, 0, 1);
+            padding-top: 0px;
+
         }
+
 
         .modal-content {
             margin: auto;
@@ -137,6 +180,39 @@
             text-align: center;
             padding: 10px;
         }
+
+        /* 페이지 전체에 Font Awesome 아이콘 적용 */
+        i {
+            font-size: 24px;
+            /* 전체 아이콘 크기 지정 */
+            margin-right: 5px;
+            /* 아이콘 간격 조정 */
+        }
+        /* 모달 창 스타일 */
+.modal-description button {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color:#555555;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* 버튼에 호버 효과 추가 */
+.modal-description button:hover {
+    background-color: black;
+}
+/* 모달 창 스타일 */
+.modal-description .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 70px;
+    color: white;
+    cursor: pointer;
+}
+        
     </style>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
@@ -154,9 +230,16 @@
         <div class="sidebar-section" data-target="main-menu">메인 메뉴</div>
         <div class="sidebar-section" data-target="side-menu">사이드 메뉴</div>
         <div class="sidebar-section" data-target="drink">음료</div>
-        <div class="mycoin">총금액: <span id="mycoinAmount">0</span>개</div>
-        <button class="gamestart"  >게임하기</button>
+        <div class="mycoin">mycoin: <span id="mycoinAmount">0</span>개</div>
+        <div class="black_jack_img"><img src="/images/gamestart.jpg" alt=""
+                style="margin-top: 20px; width: 200px; height: 100px;"></div>
+        <button class="gamestart">게임하기</button>
 
+        <div class="coinbuy_img"><img src="/images/coinbuy.jpg" alt=""
+                style="margin-top: 40px; width: 200px; height: 100px;"></div>
+        <button id="coinpur" onclick="openCoinPurchaseModal()"
+            style=" width: 200px;  border: none; background-color: #555555; color: #fff; font-size: 20px;">코인으로
+            구매하기</button>
 
     </div>
 
@@ -168,7 +251,7 @@
             <!-- 이미지와 버튼 추가 -->
             <li class="menu-image-container">
                 <img src="/images/pappe.jpg" alt="페퍼로니 피자" class="menu-image" data-item="페퍼로니 피자" data-id="1"
-                    data-price="12000원" data-etc="페퍼로니 피자입니다&lt;br&gt;추가 설명 줄 1&lt;br&gt;추가 설명 줄 2">
+                    data-price="12000원">
                 <button type="button" class="menu-button">장바구니에 추가</button>
             </li>
 
@@ -279,20 +362,155 @@
     <br><br>
     <br><br>
     <br><br>
+    <br><br>
 
     <div id="myModal" class="modal">
-        <span class="close">&times;</span>
+        <span class="close" onclick="closeModal()"><i class="fas fa-times"></i></span>
         <img class="modal-content" id="img01">
         <div id="caption" class="modal-description"></div>
     </div>
 
+    <div class="modal" id="descriptionModal" style="z-index: 2000;">
+        <div class="modal-content">
+
+            <div class="modal-description">
+                
+                <div class="backbox">
+
+                <h1>신개념 메뉴판 J_order</h1>
+                <h3>태블릿 이용규칙!</h3>
+                <h2>1. 태이블및 테블릿 파손하시면 안돼요!</h2> <br>
+                <h2>2. 음식을 주문하고 들어온 코인으로 black_jack 한 판!?</h2> <br>
+                <h2>* 음식을 장바구니에 담고 장바구니 확인을 통해 주문하시면 돼용!~ </h2><br>
+                <h2>3. 불린 코인으로 여러가지 이벤트가 있으니 많관부!!</h2>
+                <br>
+                <h2>테이블 밑에 수저,젓가락,휴지 있으니 사용해주시면 되세요~</h2>
+                <br> <p style="color: blanchedalmond;"> 화면 아무곳이나 터치해주세요!!</p>
+
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- --------------------------------------- -->
+    <div class="modal" id="coinPurchaseModal">
+        <div class="modal-description">
+            <span class="close" onclick="closeCoinPurchaseModal()">&times;</span>
+            <h2>코인으로 상품 구매하기</h2>
+            <p>현재 보유 코인: <span id="currentMycoin">0</span>개</p>
+            <div id="products">
+                <!-- 상품과 체크박스 표시할 부분 -->
+            </div>
+            <button onclick="purchaseProducts()">구매하기</button>
+        </div>
+    </div>
     
+    <!-- -------------------------------------------------- -->
     <script src="/js.js"></script>
     <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script> 네비게이션 부트스트랩 -->
 
     <!-- 이 부분은 이미지를 눌렀을 때 팝업 창으로 나오는 코드입니다 -->
 
     <script>
+        // ------------------------------------------------
+        window.onload = function () {
+            console.log('onload')
+            // 쿠키에서 mycoin 값 가져오기
+            var coinValue = getCookie('mycoin');
+            console.log(document.cookie)
+            console.log(coinValue)
+            // 가져온 값이 없거나 undefined이면 기본값 0으로 설정
+            coinValue = coinValue || 0;
+
+            // UI에 반영
+            document.getElementById('currentMycoin').innerText = coinValue;
+
+
+        };
+        // 코인으로 구매 모달 열기
+        function openCoinPurchaseModal() {
+            document.getElementById('coinPurchaseModal').style.display = 'block';
+            // 제품은 동적으로 로딩하거나 정적으로 추가할 수 있습니다.
+            // 여기서는 두 개의 제품을 가정하겠습니다 (id 1과 2).
+            document.getElementById('products').innerHTML = `
+            <img src="/images/sider.jpg" style="width: 150px; height: 150px;">
+            <input type="checkbox" id="product1" name="product1" value="10"> 음료 - 30코인<br>
+            <img src="/images/cloudbeer.jpg" style="width: 150px; height: 150px;">
+            <input type="checkbox" id="product2" name="product2" value=30"> 맥주 - 50코인<br>
+            <img src="/images/macspa.jpg" style="width: 150px; height: 150px;" >
+            <input type="checkbox" id="product3" name="product3" value="60"> 사이드 메뉴 - 60코인<br>
+            <img src="/images/saewu.jpg" style="width: 150px; height: 150px;">
+            <input type="checkbox" id="product3" name="product3" value="90"> 메인 메뉴 - 90코인<br>
+        `;
+        }
+
+        // 코인으로 구매 모달 닫기
+        function closeCoinPurchaseModal() {
+            document.getElementById('coinPurchaseModal').style.display = 'none';
+        }
+
+        // 구매 버튼 클릭 처리 함수
+        function purchaseProducts() {
+            // 쿠키에서 현재 코인 갯수 읽어오기
+            const currentCoins = parseInt(getCookie('mycoin')) || 0;
+
+            // 선택된 상품들의 코인 갯수 합산 계산
+            let selectedCoins = 0;
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            checkboxes.forEach(checkbox => {
+                selectedCoins += parseInt(checkbox.value);
+            });
+
+            // 코인 부족 여부 확인
+            if (currentCoins < selectedCoins) {
+                // 코인이 부족한 경우 알림 띄우기
+                alert('코인이 부족합니다. 구매할 수 없습니다.');
+                return;
+            }
+
+            // 쿠키에서 코인 빼기
+            const remainingCoins = currentCoins - selectedCoins;
+            setCookie('mycoin', remainingCoins, 365);
+
+            // 여기에 실제 구매 처리 로직을 추가하세요 (예: 서버에 구매 요청 등)
+
+            // 모달 닫기
+            closeCoinPurchaseModal();
+
+            window.location.reload();
+        }
+
+        // 쿠키에서 특정 이름의 쿠키값을 읽어오는 함수
+        function getCookie(cookieName) {
+            const name = cookieName + '=';
+            const decodedCookie = decodeURIComponent(document.cookie);
+            const cookieArray = decodedCookie.split(';');
+            for (let i = 0; i < cookieArray.length; i++) {
+                let cookie = cookieArray[i];
+                while (cookie.charAt(0) === ' ') {
+                    cookie = cookie.substring(1);
+                }
+                if (cookie.indexOf(name) === 0) {
+                    return cookie.substring(name.length, cookie.length);
+                }
+            }
+            return '';
+        }
+
+        // 쿠키에 특정 이름의 쿠키값을 설정하는 함수
+        function setCookie(cookieName, value, days) {
+            const d = new Date();
+            d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+            const expires = 'expires=' + d.toUTCString();
+            document.cookie = cookieName + '=' + value + ';' + expires + ';path=/';
+        }
+
+
+        // ------------------------------------------------
+
+
+
+
         // 페이지 스크롤 이벤트를 감지하여 사이드 바의 배경 색을 변경하는 스크립트
         document.addEventListener('DOMContentLoaded', function () {
             var sidebar = document.getElementById('sidebar');
@@ -331,6 +549,27 @@
                     setActiveSection(target);
                 });
             });
+            
+
+            openModal();
+
+            // 추가된 코드: 모달 열기 함수
+            function openModal() {
+                const modal = document.getElementById('descriptionModal');
+                modal.style.display = 'block';
+            }
+
+            window.addEventListener('click', function (event) {
+                const modal = document.getElementById('descriptionModal');
+
+                // 모달 내부를 클릭하더라도 모달을 닫기
+                if (event.target === modal || modal.contains(event.target)) {
+                    // 모달 내부 클릭이거나 모달 내부의 자식 엘리먼트를 클릭한 경우에는 닫지 않음
+                    modal.style.display = 'none';
+                }
+
+
+            });
 
             // 페이지 스크롤 이벤트
             window.addEventListener('scroll', function () {
@@ -361,59 +600,33 @@
                 }
             }
         });
-        // 이미지 클릭 시 모달 표시
-        const menuImages = document.querySelectorAll('.menu-image');
-        const modal = document.getElementById('mymodal');
-        const modalImg = document.getElementById('img01');
-        const modalCaption = document.getElementById('caption');
-
-        menuImages.forEach(image => {
-            image.addEventListener('click', function () {
-                modal.style.display = 'block';
-                modalImg.src = this.src;
-                modalCaption.innerHTML = this.getAttribute('data-etc');
-            });
-        });
-
-        // 모달 닫기 버튼 처리
-        const closeBtn = document.querySelector('.close');
-        closeBtn.addEventListener('click', function () {
-            modal.style.display = 'none';
-        });
-
-        // 모달 외부 클릭 시 닫기
-        window.addEventListener('click', function (event) {
-            if (event.target === modal) {
-                modal.style.display = 'none';
-            }
-        });
 
         // 클라이언트 측 코드
-       // 클라이언트 측 코드
-    
+        // 클라이언트 측 코드
 
-       let totalAmount = 0;
 
-function showCart() {
-    const cartCookie = document.cookie.split('; ')
-        .find(cookie => cookie.startsWith('cart='));
+        let totalAmount = 0;
 
-    if (!cartCookie) {
-        alert('장바구니가 비어 있습니다.');
-        return;
-    }
+        function showCart() {
+            const cartCookie = document.cookie.split('; ')
+                .find(cookie => cookie.startsWith('cart='));
 
-    const decodedCartValue = decodeURIComponent(cartCookie.split('=')[1]);
-    const cartItems = JSON.parse(decodedCartValue);
+            if (!cartCookie) {
+                alert('장바구니가 비어 있습니다.');
+                return;
+            }
 
-    // 현재까지의 누적 총 금액 계산
-    totalAmount = cartItems.reduce((sum, item) => sum + parseFloat(item.price), 0);
+            const decodedCartValue = decodeURIComponent(cartCookie.split('=')[1]);
+            const cartItems = JSON.parse(decodedCartValue);
 
-    // 모달 창에 장바구니 내역 표시
-    const modal = document.getElementById('myModal');
-    const modalContent = modal.querySelector('.modal-description');
+            // 현재까지의 누적 총 금액 계산
+            totalAmount = cartItems.reduce((sum, item) => sum + parseFloat(item.price), 0);
 
-    modalContent.innerHTML = `
+            // 모달 창에 장바구니 내역 표시
+            const modal = document.getElementById('myModal');
+            const modalContent = modal.querySelector('.modal-description');
+
+            modalContent.innerHTML = `
         <h2>장바구니 내역</h2>
         ${cartItems.map(item => `
             <p>${item.name} - ₩${parseFloat(item.price)}원 
@@ -423,72 +636,96 @@ function showCart() {
         <p><strong>총 금액:</strong> ₩${totalAmount}원</p>
     `;
 
-    // 모달 창 열기
-    modal.style.display = 'block';
+            // 모달 창 열기
+            modal.style.display = 'block';
 
-    // "구매하기" 버튼 추가
-    const purchaseButton = document.createElement('button');
-    purchaseButton.textContent = '구매하기';
-    purchaseButton.addEventListener('click', function() {
-        // 구매 처리
-        purchaseItems();
-    });
-    modalContent.appendChild(purchaseButton);
+            // "구매하기" 버튼 추가
+            const purchaseButton = document.createElement('button');
+            purchaseButton.textContent = '구매하기';
+            purchaseButton.addEventListener('click', function () {
+                // 구매 처리
+                purchaseItems();
+            });
+            modalContent.appendChild(purchaseButton);
 
-    // "삭제" 버튼에 이벤트 리스너 추가
-    const deleteButtons = modalContent.querySelectorAll('.delete-button');
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', function () {
-            const itemId = this.getAttribute('data-id');
-            deleteItem(itemId);
-        });
-    });
-}
+            modalContent.appendChild(purchaseButton);
 
-// "구매하기" 버튼을 눌렀을 때 실행되는 함수
-function purchaseItems() {
-    const cartCookie = document.cookie.split('; ')
-        .find(cookie => cookie.startsWith('cart='));
+            // 모달 창 우측 상단에 "닫기" 버튼 추가
+            const closeButton = document.createElement('span');
+            closeButton.innerHTML = '&times;';
+            closeButton.className = 'close-button';
+            closeButton.addEventListener('click', closeModal);
+            modal.appendChild(closeButton);
 
-    if (!cartCookie) {
-        alert('장바구니가 비어 있습니다.');
-        return;
-    }
-
-    const decodedCartValue = decodeURIComponent(cartCookie.split('=')[1]);
-    const cartItems = JSON.parse(decodedCartValue);
-
-    axios.post('/purchase', cartItems)
-        .then(response => {
-            console.log('Purchase successful:', response.data);
-
-            // 구매가 완료되면 쿠키 초기화
-            document.cookie = 'cart=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/';
-
-            // mycoin 갱신
-            const mycoinAmountElement = document.getElementById('mycoinAmount');
-            const currentMycoin = parseFloat(mycoinAmountElement.textContent);
-
-            // 현재까지의 누적 총 금액 계산
-            const totalAmount = cartItems.reduce((sum, item) => sum + parseFloat(item.price), 0);
-
-            // 새로운 합계 금액을 현재 mycoin 값에 더하고 mycoin 엘리먼트 업데이트
-            const updatedMycoin = currentMycoin + totalAmount / 1000;
-                mycoinAmountElement.textContent = updatedMycoin.toFixed(0);
-
-                  // mycoin 값을 쿠키에 저장
-                  document.cookie = `mycoin=${updatedMycoin}; path=/`; // 변경된 부분
-
-            // 팝업 창 닫기
+            // "삭제" 버튼에 이벤트 리스너 추가
+            const deleteButtons = modalContent.querySelectorAll('.delete-button');
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const itemId = this.getAttribute('data-id');
+                    deleteItem(itemId);
+                });
+            });
+            // 모달 외부 클릭 시 닫기
+            window.addEventListener('click', function (event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+            modal.style.display = 'block';
+        }
+        function closeModal() {
             const modal = document.getElementById('myModal');
             modal.style.display = 'none';
-        })
-        .catch(error => {
-            console.error('Purchase error:', error);
-            alert('구매 중 오류가 발생했습니다.');
-        });
-}
-// ...
+        }
+
+        // "구매하기" 버튼을 눌렀을 때 실행되는 함수
+        function purchaseItems() {
+            const cartCookie = document.cookie.split('; ')
+                .find(cookie => cookie.startsWith('cart='));
+
+            if (!cartCookie) {
+                alert('장바구니가 비어 있습니다.');
+                return;
+            }
+
+            const decodedCartValue = decodeURIComponent(cartCookie.split('=')[1]);
+            const cartItems = JSON.parse(decodedCartValue);
+
+            axios.post('/purchase', cartItems)
+                .then(response => {
+                    console.log('Purchase successful:', response.data);
+
+                    // 구매가 완료되면 쿠키 초기화
+                    document.cookie = 'cart=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/';
+
+                    // mycoin 갱신
+                    const mycoinAmountElement = document.getElementById('mycoinAmount');
+                    const currentMycoin = parseFloat(mycoinAmountElement.textContent);
+
+                    // 현재까지의 누적 총 금액 계산
+                    const totalAmount = cartItems.reduce((sum, item) => sum + parseFloat(item.price), 0);
+
+                    // 새로운 합계 금액을 현재 mycoin 값에 더하고 mycoin 엘리먼트 업데이트
+                    const updatedMycoin = currentMycoin + totalAmount / 1000;
+                    mycoinAmountElement.textContent = updatedMycoin.toFixed(0);
+
+                    // mycoin 값을 쿠키에 저장
+                    document.cookie = `mycoin=${updatedMycoin}; path=/`; // 변경된 부분
+
+                    // 팝업 창 닫기
+                    const modal = document.getElementById('myModal');
+                    modal.style.display = 'none';
+
+                    window.location.reload();
+                })
+                .catch(error => {
+                    console.error('Purchase error:', error);
+                    alert('구매 중 오류가 발생했습니다.');
+                });
+
+            
+        }
+        // ...
         function deleteItem(itemId) {
             const cartCookie = document.cookie.split('; ')
                 .find(cookie => cookie.startsWith('cart='));
@@ -510,13 +747,14 @@ function purchaseItems() {
             // 모달 창 갱신
             showCart();
         }
-         // 게임하기 버튼 클릭 시 블랙잭 게임 페이지로 이동하는 함수
         // 게임하기 버튼 클릭 시 블랙잭 게임 페이지로 이동하는 함수
-document.querySelector('.gamestart').addEventListener('click', function() {
-    window.location.href = '/black_jack'; // 블랙잭 게임 페이지로 이동
-});
+        // 게임하기 버튼 클릭 시 블랙잭 게임 페이지로 이동하는 함수
+        document.querySelector('.gamestart').addEventListener('click', function () {
+            window.location.href = '/black_jack'; // 블랙잭 게임 페이지로 이동
+        });
 
-    
+
+
     </script>
 
 </body>

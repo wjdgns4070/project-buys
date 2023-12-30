@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // 장바구니 확인 버튼 생성
     const cartButton = document.createElement('button');
     cartButton.textContent = '장바구니 확인';
-    cartButton.style.backgroundColor = '#4CAF50';
+    cartButton.style.backgroundColor = '#555555';
     cartButton.style.color = 'white';
     cartButton.style.padding = '15px 30px';
     cartButton.style.border = 'none';
@@ -56,15 +56,15 @@ document.addEventListener("DOMContentLoaded", function () {
     function createDynamicCartIndicator() {
         const dynamicCartIndicator = document.createElement('div');
         dynamicCartIndicator.id = 'dynamic-cart-indicator';
-        dynamicCartIndicator.style.backgroundColor = 'blue'; // 동그라미의 배경색을 파란색으로 설정
-        dynamicCartIndicator.style.color = 'white'; // 동그라미 안의 텍스트 색상
-        dynamicCartIndicator.style.borderRadius = '50%'; // 동그라미를 동그랗게 만들기
-        dynamicCartIndicator.style.padding = '5px 10px'; // 동그라미 안의 텍스트와 경계 사이의 간격
+        dynamicCartIndicator.style.backgroundColor = 'gray'; 
+        dynamicCartIndicator.style.color = 'white'; 
+        dynamicCartIndicator.style.borderRadius = '50%';
+        dynamicCartIndicator.style.padding = '5px 10px'; 
         dynamicCartIndicator.style.position = 'fixed';
-        dynamicCartIndicator.style.bottom = '10px'; // 동적 동그라미 위치 조절 (예시로 아래에 배치)
+        dynamicCartIndicator.style.bottom = '35px'; 
         dynamicCartIndicator.style.right = '80px';
         dynamicCartIndicator.style.zIndex = '100';
-        dynamicCartIndicator.style.display = 'none'; // 초기에는 보이지 않도록 설정
+        dynamicCartIndicator.style.display = 'none';
 
         // 동그라미를 body에 추가
         document.body.appendChild(dynamicCartIndicator);
@@ -94,6 +94,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // 동그라미 표시
         dynamicCartIndicator.style.display = 'block';
     }
+    
 
     // 초기 로딩 시 동적 동그라미 업데이트
     updateDynamicCartIndicator();

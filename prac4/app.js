@@ -15,8 +15,10 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 // Routes
+const purchaseController = require('./controllers/purchaseController'); // 경로를 실제 프로젝트에 맞게 수정
 const menuController = require('./controllers/menuController');
 app.use('/', menuController);
+app.use('/', purchaseController); // '/api'는 실제 사용하고자 하는 경로로 수정
 
 app.get('/', (req, res) => {
     const itemData = [

@@ -104,6 +104,8 @@ function com_card_show(num){  // 딜러 카드 보여주기
 function new_start(){ //다시시작
   suple();
   setTimeout(turn,1000);
+  player_score.value = 500
+  document.getElementById('betting_amount').disabled = true;
 }
 function turn(){  // 턴 시작  플레이어, 딜러 카드 2장씩 뽑기
   player_card = [];
@@ -321,15 +323,62 @@ function end(){   //턴 종료
   var player_score = document.getElementById('player_score');
   player_score.value = score;
 
+  var coinValue = parseInt(document.getElementById('coin_value').innerText); // 현재 코인 값
+  var bettingAmount = parseInt(document.getElementById('betting_amount').value);
+
+
   document.getElementById('restart').style.display = "block";   //다시하기 버튼 보여주기
   document.getElementById('gaming').style.display = "none";     //게임 버튼 삭제
   //document.getElementById('com_num_board').style.display = "block";
-  if(card.length-count<10){                             // 남은 카드가 10장 미만인 경우 게임 종료
-  
+  if (card.length - count < 10) { // 남은 카드가 10장 미만인 경우 게임 종료
     alert("게임 종료");
-    player_score=500;
+
+    if (score >= 800) {
+      coinValue += bettingAmount; // 스코어가 800 이상이면 베팅 금액을 코인에 추가
+      alert("현재 코인이 " + bettingAmount + "만큼 증가했습니다.");
+    } else if (score < 800) {
+      coinValue -= bettingAmount; // 스코어가 800 미만이면 베팅 금액을 코인에서 차감
+      alert("현재 코인이 " + bettingAmount + "만큼 감소했습니다.");
+    }
+
+    // 업데이트된 코인 값을 쿠키에 저장
+    setCookie('mycoin', coinValue);
+
+    document.getElementById('coin_value').innerText = coinValue; // UI 업데이트
+
     document.getElementById('restart').style.display = "none"; // 다시하기 버튼 삭제
     document.getElementById('start').style.display = "block"; // 시작 버튼 보여주기
+    
+      window.location.href = '/black_jack'; // 블랙잭 게임 페이지로 이동
+
   }
 }
 
+
+function setCookie(name, value, days) {
+  var expires = "";
+  if (days) {
+      var date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      expires = "; expires=" + date.toUTCString();
+  }
+  document.cookie = name + "=" + value + expires + "; path=/";
+}
+
+// 페이지 로딩 시 실행되는 초기화 함수
+window.onload = function () {
+  // 쿠키에서 mycoin 값 가져오기
+  var coinValue = getCookie('mycoin');
+  // 가져온 값이 있으면 UI에 반영
+  if (coinValue !== "") {
+      document.getElementById('coin_value').innerText = coinValue;
+  }
+  
+};
+
+// 추가된 부분: 쿠키에서 값을 가져오는 함수
+function getCookie(name) {
+  var value = "; " + document.cookie;
+  var parts = value.split("; " + name + "=");
+  if (parts.length == 2) return parts.pop().split(";").shift();
+}

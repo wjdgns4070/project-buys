@@ -5,7 +5,7 @@ const mysql = require('mysql2/promise');
 
 // MySQL Pool 생성
 const pool = mysql.createPool({
-    host: 'localhost',
+    host: '127.0.0.1',
     user: 'user',
     password: '1234',
     database: 'kdt',
@@ -83,4 +83,10 @@ router.post('/purchase', async (req, res) => {
     }
 });
 
+
+// ----------------------------------------
+
+
+
+// ----------------------------------------
 module.exports = router;
